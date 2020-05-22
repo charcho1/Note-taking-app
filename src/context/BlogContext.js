@@ -25,7 +25,7 @@ export const BlogProvider = ({children}) => {
     const addBlogPost = () => {
         dispatch ({type:'add_blogpost'});
     }
-    //above: we make a helper function that 
+    //above: we make a helper function that runs dispatch
    ;
    return (<BlogContext.Provider value={{data:blogPosts, addBlogpost }}>
         {children}
