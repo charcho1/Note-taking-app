@@ -1,6 +1,7 @@
 import React, {useReducer} from 'react';
-const BlogContext = React.createContext();
-//BlogContext an obj which will move info from BPP to blog list
+import createDataContext from './createDataContext';
+//const BlogContext = React.createContext(); --> we can comment out because importing createdatacontext
+//BlogContext is an obj which will move info from BPP to blog list
 const blogReducer = (state,action) => {
     //reducer gets 2 arguments: state and action. 
     /*we switch: depending on the type that action has, we will 
@@ -17,7 +18,9 @@ const blogReducer = (state,action) => {
                 return state;
     }
 }
-export const BlogProvider = ({children}) => {
+const addBlogPost = () => {
+    dispatch ({type:'add_blogpost'});
+/*export const BlogProvider = ({children}) => {
    
    const [blogPosts, dispatch] = useReducer(blogReducer,[]);
    //above: 1st arg is the reducer function we will use, 2nd is initial state object (blank array)
@@ -26,8 +29,8 @@ export const BlogProvider = ({children}) => {
         dispatch ({type:'add_blogpost'});
     }
     //above: we make a helper function that runs dispatch
-   ;
-   return (<BlogContext.Provider value={{data:blogPosts, addBlogpost }}>
+   ;--> we can comment out because importing createdatacontext */
+return (<BlogContext.Provider value={{data:blogPosts, addBlogPost }}>
         {children}
     </BlogContext.Provider>);}
 
@@ -51,4 +54,7 @@ export const BlogProvider = ({children}) => {
 */
 
 
-export default BlogContext;
+//export default BlogContext; //--> we can comment out because importing createdatacontext
+export const {Context,Provider} = createDataContext(blogReducer, {addBlogPost},
+    []
+    )
