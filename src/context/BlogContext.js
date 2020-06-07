@@ -1,4 +1,4 @@
-import React, {useReducer} from 'react';
+//import React, {useReducer} from 'react'; no jsx after we refactored it
 import createDataContext from './createDataContext';
 //const BlogContext = React.createContext(); --> we can comment out because importing createdatacontext
 //BlogContext is an obj which will move info from BPP to blog list
@@ -12,14 +12,17 @@ const blogReducer = (state,action) => {
 
     */
     switch (action.type) {
+        case 'delete_blogpost':
+            return state.filter ((blogPost) => blogPost.id!==action.payload)
         case 'add_blogpost':
-            return [...state, {title: `Blog Post #${state.length+1}`}] // return all the states thus far and add this new prop
+            return [...state, {id: Math.floor(Math.random()*9999), title: `Blog Post #${state.length+1}`}] // return all the states thus far and add this new prop
         default:
                 return state;
     }
 }
-const addBlogPost = () => {
-    dispatch ({type:'add_blogpost'});
+const addBlogPost = (dispatch) => {
+    return () => {
+    dispatch ({type:'add_blogpost'});}}
 /*export const BlogProvider = ({children}) => {
    
    const [blogPosts, dispatch] = useReducer(blogReducer,[]);
@@ -30,9 +33,14 @@ const addBlogPost = () => {
     }
     //above: we make a helper function that runs dispatch
    ;--> we can comment out because importing createdatacontext */
-return (<BlogContext.Provider value={{data:blogPosts, addBlogPost }}>
-        {children}
-    </BlogContext.Provider>);}
+const deleteBlogPost = dispatch => {
+    return (id) => {
+        dispatch ({type:'delete_blogpost', payload:id})//id: is the id of post to delete
+    }
+}
+
+
+
 
 //above, it's the same program as below but using reducer
 /*import React, {useState} from 'react';
@@ -55,6 +63,6 @@ export const BlogProvider = ({children}) => {
 
 
 //export default BlogContext; //--> we can comment out because importing createdatacontext
-export const {Context,Provider} = createDataContext(blogReducer, {addBlogPost},
+export const {Context,Provider} = createDataContext(blogReducer, {addBlogPost, deleteBlogPost},
     []
     )

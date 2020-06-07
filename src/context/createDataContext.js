@@ -6,7 +6,13 @@ export default (reducer, actions, initialState) => {
     const Context = React.createContext();
     const Provider = ({children}) => {
         const [state,dispatch] = useReducer(reducer, initialState);//passing in these 2 args
-        return <Context.Provider value={{state}}>
+        //actions === {addBLogPost: (dispatch) => {return() => {}}} we call addblogpost function pass dispatch on it which will return this other function
+        //this whole thing will be set on boundactions and pass it down the value prop
+        const boundActions = {};
+        for (let key in actions) {
+            boundActions [key]= actions[key](dispatch);
+        }
+        return <Context.Provider value={{state,...boundActions}}>
             {children}
         </Context.Provider>
     }

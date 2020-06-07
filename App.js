@@ -5,8 +5,12 @@ import { createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import IndexScreen from './src/Screens/IndexScreen';
 import {BlogProvider} from './src/context/BlogContext'; //{} imported because not default export on blog context
+import ShowScreen from './src/Screens/ShowScreen'
+import CreateScreen from './src/Screens/CreateScreen'
 const navigator = createStackNavigator ({
-  Index: IndexScreen
+  Index: IndexScreen,
+  Show: ShowScreen,
+  Create:CreateScreen ,
 },{
   initialRouteName: 'Index', 
   defaultNavigationOptions: {
@@ -24,9 +28,9 @@ const styles = StyleSheet.create({
 });
 const App = createAppContainer(navigator);
 export default () => {
-  return <BlogProvider>
+  return (<BlogProvider>
     <App />
-  </BlogProvider>
+  </BlogProvider>);
 
 };//so instead of exporting defaault createappcont(nav),
 //we defined app as a variable and created a function that runs
