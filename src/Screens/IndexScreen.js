@@ -2,24 +2,42 @@ import React, {useContext} from 'react';//use UseContext to inherit the value of
 import { StyleSheet, Text, View, FlatList, Button, TouchableOpacity } from 'react-native';
 import {Context} from '../context/BlogContext';
 import {Feather} from '@expo/vector-icons'
+//this screen shows list of blogposts to our users
 const IndexScreen =({navigation}) =>
-{
-    const {data, addBlogPost} = useContext(Context); //passing in the BC Context into a constant called value
+{   /*
+
     return (
         <View>
-            <Button title="Add Post" onPress={addBlogPost}/>
+            <Text>Index Screen</Text>
+            <Button title="Add Post" onPress = {addBlogPost} //when pressed, call the addblogpost function which is from BlogCOntext
+            /> 
             <FlatList
-                data = {data}
+                data = {state} //this is the array that will be displayed
+                keyExtractor={(blogPost)=>blogPost.title} //each title will be a new key
+                renderItem={({item})=>{ //return the item property and return item.title
+                return<Text>{item.title}</Text>}}/> 
+        </View>
+    )*/
+    const {state, deleteBlogPost} = useContext(Context); 
+    //UseContext(context): receives the value of {Context} from blog context. This used to be value={{data:blogPosts, addBlogPost:addBlogPost}} until it got commented out
+    // passing in the BC Context into a constant called value
+    return (
+        <View>
+
+            <FlatList
+                data = {state}
                 keyExtractor={(blogPost)=>blogPost.title}
                 renderItem={({item})=>{
                 return (
-                    <TouchableOpacity onPress={()=> navigation.navigate('Show',{id:item.id})}>
-                    <View style={styles.row}>
-                        <Text style={styles.title}>{item.title}-{item.id}</Text>
-                            <TouchableOpacity onPress={() => deleteBlogPost(item.id)}>
-                            <Feather name="trash" style={styles.icon}/>
-                            </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity onPress={()=> navigation.navigate('Show',{id:item.id})} //id:item.id specifies the blogpost with which id we want to navigate to
+                       >
+                        <View style={styles.row}>
+                            <Text style={styles.title}>{item.title}-{item.id}</Text>
+                                <TouchableOpacity onPress={() => deleteBlogPost(item.id)}// this allows trash to be tappable 
+                                > 
+                                <   Feather name="trash" style={styles.icon}/>
+                                </TouchableOpacity>
+                        </View>
                     </TouchableOpacity>
                     );
                 }}
@@ -31,15 +49,16 @@ const IndexScreen =({navigation}) =>
     we can't pass an object directly  as a react child */
 };
 
-IndexScreen.navigationOptions=()=>{
+IndexScreen.navigationOptions=({navigation})=>{
     return{
-        headerRight:
-             <TouchableOpacity onPress={({navigation})=>navigation.navigate('Create')}>
+        headerRight: (()=>
+             <TouchableOpacity onPress={()=>navigation.navigate('Create')}>
                  <Feather name="plus" size={30}/>
             </TouchableOpacity>
-    }
+        )}
 //when indexscreen is about to be displayed by react navigation, it will call this function we assiend to navigationoptions
 //this allows us to display header only on the indexscreen
+//headerright: shows the thing on the right side of header
 
 }
 const styles = StyleSheet.create({
