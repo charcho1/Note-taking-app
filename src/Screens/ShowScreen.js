@@ -23,10 +23,10 @@ const ShowScreen =({navigation}) =>
 
 ShowScreen.navigationOptions = ({ navigation }) => {
     return {
-      headerRight: (
+      headerRight: (()=>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate('Edit', { id: navigation.getParam('id') })
+            navigation.navigate('Edit', { id: navigation.getParam('id') }) //id is passed onto edit screen
           }
         >
           <EvilIcons name="pencil" size={35} />

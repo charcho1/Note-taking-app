@@ -2,6 +2,8 @@
 import createDataContext from './createDataContext';
 //const BlogContext = React.createContext(); --> we can comment out because importing createdatacontext
 //BlogContext is an obj which will move info from BPP to blog list
+
+import jsonServer from '../api/jsonServer'; //need to import to dispatch something referring to jsonserver
 const blogReducer = (state,action) => {
     //reducer gets 2 arguments: state and action. 
     /*we switch: depending on the type that action has, we will 
@@ -12,6 +14,16 @@ const blogReducer = (state,action) => {
 
     */
     switch (action.type) {
+        case 'get_blogposts':
+            return action.payload
+        case 'edit_blogpost':
+            return state.map((blogPost)=> {
+                return blogPost.id===action.payload.id
+                    ? action.payload 
+                    : blogpost
+
+                }
+            )
         case 'delete_blogpost':
             return state.filter ((blogPost) => blogPost.id!==action.payload) 
             //filter function: iterate thru all elem of state array and run child function ((BP)=>)we pass in 
@@ -31,10 +43,29 @@ const blogReducer = (state,action) => {
                 return state;
     }
 }
-const addBlogPost = (dispatch) => {
-    return (title,content, callback) => {
-    dispatch ({type:'add_blogpost', payload: {title, content}});
-    callback();}}
+
+const getBlogPosts = dispatch => {
+    return async () => {
+        const response = await jsonServer.get('/blogposts')
+
+        dispatch ({ type: 'get_blogposts', payload: response.data })
+        //makes a request, gets reponse, and dispatches the functions obtained. make request to /blogposts, which means (url from ngrok/blogpost)
+        //response is an array of blogposts
+        //async await because we make a network request
+        //dispatch the type, payload. when we call it, we call our reducer. action is provided as a second argument to reducer
+    }
+}
+const addBlogPost = dispatch => {
+    return async (title, content, callback) => {
+      await jsonServer.post('/blogposts', { title, content });
+  
+      if (callback) {
+        callback();
+      }
+    };
+  };
+    /*dispatch ({type:'add_blogpost', payload: {title, content}});
+    callback();}} */
     //this callback is needed for the callback function which auto navigates user back to index screen once blog is saved
 /*export const BlogProvider = ({children}) => {
    
@@ -51,6 +82,19 @@ const deleteBlogPost = dispatch => {
         dispatch ({type:'delete_blogpost', payload:id})//id: is the id of post to delete assigned to item (back in indexscreen)
     }//id is received as an argument received
 }
+const editBlogPost = dispatch => {
+    return async (id, title, content, callback) => {
+      await jsonServer.put(`/blogposts/${id}`, { title, content });
+  
+      dispatch({
+        type: 'edit_blogpost',
+        payload: { id, title, content }
+      });
+      if (callback) {
+        callback();
+      }
+    };
+  };
 
 
 
@@ -84,6 +128,6 @@ we are passing down multiple args: data (which is defined as blogposots) and add
 //export default BlogContext; //--> we can comment out because importing createdatacontext
 //instead, we destructure out createdatacontext the rpoducts of createdatacontext.js = context and provider
 //1st arg is our reducer, then an object that contains all the different actions we want
-export const {Context,Provider} = createDataContext(blogReducer, {addBlogPost, deleteBlogPost},
+export const {Context,Provider} = createDataContext(blogReducer, {addBlogPost, deleteBlogPost, editBlogPost, getBlogPosts},
     []
     )
