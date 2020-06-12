@@ -16,7 +16,7 @@ const navigator = createStackNavigator ({
 },{
   initialRouteName: 'Index', 
   defaultNavigationOptions: {
-    title: 'Blogs'
+    title: 'Notes'
   }
 });
 //above lists all screens user can navigate to 

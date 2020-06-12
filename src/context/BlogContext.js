@@ -55,17 +55,10 @@ const getBlogPosts = dispatch => {
         //dispatch the type, payload. when we call it, we call our reducer. action is provided as a second argument to reducer
     }
 }
-const addBlogPost = dispatch => {
-    return async (title, content, callback) => {
-      await jsonServer.post('/blogposts', { title, content });
-  
-      if (callback) {
-        callback();
-      }
-    };
-  };
-    /*dispatch ({type:'add_blogpost', payload: {title, content}});
-    callback();}} */
+const addBlogPost = (dispatch) => {
+    return (title,content, callback) => {
+    dispatch ({type:'add_blogpost', payload: {title, content}});
+    callback();}}
     //this callback is needed for the callback function which auto navigates user back to index screen once blog is saved
 /*export const BlogProvider = ({children}) => {
    
@@ -82,19 +75,13 @@ const deleteBlogPost = dispatch => {
         dispatch ({type:'delete_blogpost', payload:id})//id: is the id of post to delete assigned to item (back in indexscreen)
     }//id is received as an argument received
 }
-const editBlogPost = dispatch => {
-    return async (id, title, content, callback) => {
-      await jsonServer.put(`/blogposts/${id}`, { title, content });
-  
-      dispatch({
-        type: 'edit_blogpost',
-        payload: { id, title, content }
-      });
-      if (callback) {
+const editBlogPost=dispatch => {
+    return(id,title,content,callback)=> {
+        dispatch({type:'edit_blogpost', payload: {id:id, title:title, content:content}})
         callback();
-      }
-    };
-  };
+
+    }
+}
 
 
 

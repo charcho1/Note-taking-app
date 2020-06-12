@@ -1,5 +1,4 @@
-import React, {useContext, useEffect} from 'react';//use UseContext to inherit the value of context from BC
-//useeffect runs the arrow function one time when comopnent shows up o n the screen
+import React, {useContext} from 'react';//use UseContext to inherit the value of context from BC
 import { StyleSheet, Text, View, FlatList, Button, TouchableOpacity } from 'react-native';
 import {Context} from '../context/BlogContext';
 import {Feather} from '@expo/vector-icons'
@@ -19,19 +18,7 @@ const IndexScreen =({navigation}) =>
                 return<Text>{item.title}</Text>}}/> 
         </View>
     )*/
-    const {state, deleteBlogPost, getBlogPosts} = useContext(Context); 
-
-    useEffect(() => {
-        getBlogPosts();
-    
-        const listener = navigation.addListener('didFocus', () => {
-          getBlogPosts();
-        });
-    
-        return () => {
-          listener.remove();
-        };
-      }, []);
+    const {state, deleteBlogPost} = useContext(Context); 
     //UseContext(context): receives the value of {Context} from blog context. This used to be value={{data:blogPosts, addBlogPost:addBlogPost}} until it got commented out
     // passing in the BC Context into a constant called value
     return (
@@ -45,7 +32,7 @@ const IndexScreen =({navigation}) =>
                     <TouchableOpacity onPress={()=> navigation.navigate('Show',{id:item.id})} //id:item.id specifies the blogpost with which id we want to navigate to
                        >
                         <View style={styles.row}>
-                            <Text style={styles.title}>{item.title}-{item.id}</Text>
+                            <Text style={styles.title}>{item.title}</Text>
                                 <TouchableOpacity onPress={() => deleteBlogPost(item.id)}// this allows trash to be tappable 
                                 > 
                                 <   Feather name="trash" style={styles.icon}/>

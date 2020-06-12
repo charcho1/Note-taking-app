@@ -23,7 +23,7 @@ const BlogPostForm =({onSubmit, initialValues}) => //we receive onsubmit, which 
               value={content}
               onChangeText={text => setContent(text)}
             />
-            <Button title="Save Blog Post" onPress={() => onSubmit(title, content)} />
+            <Button title="Save note" onPress={() => onSubmit(title, content)} />
           </View>
         );
       };//the above sets the value of the title and content defined above.
