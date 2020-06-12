@@ -1,3 +1,3 @@
-# blog
+# Notes
 
 ![](Images/Demo.gif)
